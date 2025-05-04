@@ -1,0 +1,127 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+class Student
+{
+public:
+int roll;
+char name[30];
+char Div;
+char add[50];
+Student()
+{
+roll = -1 ;
+}
+void input()
+{
+cout << "Enter Roll No: ";
+cin >> roll;
+cout << "Enter Name: ";
+cin >> name;
+cout << "Enter Division: ";
+cin >> Div;
+cout << "Enter Address: ";
+cin.ignore();
+cin.getline(add , 50 );
+}
+void display() {
+if (roll != -1) {
+cout << "Roll: " << roll << ", Name: " << name
+<< ", Division: " << Div << ", Address: " << add << endl;
+}
+}
+};
+class FileManager
+{
+public:
+fstream file ;
+int roll;
+void createFile()
+{
+file.open("Student.dat" , ios::out | ios::binary);
+Student s;
+for(int i =0 ; i<100 ; i++)
+file.write((char*)&s , sizeof(s));
+file.close();
+}
+void insert(Student s )
+{
+file.open("Student.dat" , ios::out | ios::binary);
+file.seekp((s.roll=-1)* sizeof(s));
+file.write((char*)&s , sizeof(s));
+file.close();
+}
+void search(int roll)
+{
+Student s;
+file.open("Student.dat" , ios::out | ios::binary);
+file.seekg((roll-1)*sizeof(s));
+file.read((char*)&s , sizeof(s));
+if(s.roll != -1)
+s.display();
+else
+cout<<"Student not found "<<endl;
+file.close();
+}
+void Delete(int roll)
+{
+Student s;
+file.open("students.dat", ios::in | ios::out | ios::binary);
+file.seekp((roll - 1) * sizeof(s));
+file.write((char*)&s, sizeof(s));
+file.close();
+cout << "Record deleted.\n";
+}
+void display()
+{
+Student s;
+file.open("students.dat", ios::in | ios::binary);
+while(file.read((char*)&s , sizeof(s)))
+{
+if(s.roll != -1)
+s.display();
+}
+file.close();
+}
+};
+int main() {
+FileManager fm;
+Student s;
+int choice, roll;
+fm.createFile();
+do {
+cout << "\n--- MENU ---\n";
+cout << "1. Insert Student\n";
+cout << "2. Search Student\n";
+cout << "3. Delete Student\n";
+cout << "4. Display All Students\n";
+cout << "5. Exit\n";
+cout << "Enter your choice: ";
+cin >> choice;
+switch (choice) {
+case 1:
+s.input();
+fm.insert(s);
+break;
+case 2:
+cout << "Enter roll to search: ";
+cin >> roll;
+fm.search(roll);
+break;
+case 3:
+cout << "Enter roll to delete: ";
+cin >> roll;
+fm.Delete(roll);
+break;
+case 4:
+fm.display();
+break;
+case 5:
+cout << "Exiting...\n";
+break;
+default:
+cout << "Invalid choice!\n";
+}
+} while (choice != 5);
+return 0;
+}

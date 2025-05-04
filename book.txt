@@ -1,0 +1,72 @@
+#include<iostream>
+#include<string>
+using namespace std;
+class Node {
+public:
+string name;
+int childCount;
+Node* children[10]; // Fixed typo from 'childern' to 'children'
+Node(string n) {
+name = n;
+childCount = 0;
+}
+void addChild(Node* child) {
+children[childCount++] = child; // Add child node to this node
+}
+void print(int level = 0) {
+// Indentation for displaying hierarchy
+for (int i = 0; i < level; i++)
+cout << " "; // Indentation based on level
+cout << name << endl;
+// Recursively print child nodes
+for (int i = 0; i < childCount; i++) {
+children[i]->print(level + 1);
+}
+}
+};
+int main() {
+string bookName;
+cout << "Enter book name: ";
+getline(cin, bookName);
+Node* book = new Node(bookName); // Create the book node
+int chapterCount;
+cout << "Enter number of chapters in " << bookName << ": "; // Prompt for chapters
+cin >> chapterCount;
+cin.ignore(); // To clear the newline character left by cin
+// Loop to add chapters to the book
+for (int i = 0; i < chapterCount; i++) {
+string chapterName;
+cout << "Enter the name of chapter " << i + 1 << ": ";
+getline(cin, chapterName);
+Node* chapter = new Node(chapterName); // Create chapter node
+book->addChild(chapter); // Add chapter as child to the book
+int sectionCount;
+cout << "Enter number of sections in " << chapterName << ": "; // Prompt for sections
+cin >> sectionCount;
+cin.ignore(); // Clear newline character
+// Loop to add sections to the current chapter
+for (int j = 0; j < sectionCount; j++) {
+string sectionName;
+cout << "Enter the name of section " << j + 1 << ": ";
+getline(cin, sectionName);
+Node* section = new Node(sectionName); // Create section node
+chapter->addChild(section); // Add section as child to the chapter
+int subsectionCount;
+cout << "Enter number of subsections in " << sectionName << ": "; // Prompt for subsections
+cin >> subsectionCount;
+cin.ignore(); // Clear newline character
+// Loop to add subsections to the current section
+for (int k = 0; k < subsectionCount; k++) {
+string subsecName;
+cout << "Enter name of subsection " << k + 1 << ": ";
+getline(cin, subsecName);
+Node* subsection = new Node(subsecName); // Create subsection node
+section->addChild(subsection); // Add subsection as child to the section
+}
+}
+}
+// Print the entire book structure
+cout << "Book structure: \n";
+book->print(); // Call print to display the tree structure
+return 0;
+}
