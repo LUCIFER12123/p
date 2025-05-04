@@ -1,0 +1,68 @@
+# Define a class called MySet
+class MySet:
+def __init__(self):
+self.s = [] # Create an empty list to store set elements
+def create(self):
+n = int(input("Enter number of elements: ")) # Ask how many elements to enter
+for i in range(n):
+a = int(input("Enter element: ")) # Take input for each element
+if a not in self.s: # Avoid duplicates
+self.s.append(a)
+def remove(self):
+a = int(input("Enter element to remove: "))
+if a in self.s:
+self.s.remove(a) # Remove the element if it exists
+else:
+print("Element not found.")
+def contain(self):
+a = int(input("Enter element to search: "))
+if a in self.s:
+print("Element is present.")
+else:
+print("Element is not present.")
+def size(self):
+print("Size of the set is:", len(self.s)) # Print number of elements
+def display(self):
+print("Set elements:", self.s) # Print the list as a set
+def union(self, other):
+result = MySet()
+result.s = self.s.copy() # Copy current set
+for i in other.s:
+if i not in result.s:
+result.s.append(i) # Add elements from other set if not present
+return result
+def intersection(self, other):
+result = MySet()
+for i in self.s:
+if i in other.s:
+result.s.append(i) # Add only common elements
+return result
+def difference(self, other):
+result = MySet()
+for i in self.s:
+if i not in other.s:
+result.s.append(i) # Add elements not in other set
+return result
+# Now using the class with 2-3 sets
+s1 = MySet()
+s2 = MySet()
+print("Create Set 1:")
+s1.create()
+s1.display()
+print("\nCreate Set 2:")
+s2.create()
+s2.display()
+print("\nRemoving an element from Set 1:")
+s1.remove()
+s1.display()
+print("\nChecking if element exists in Set 2:")
+s2.contain()
+print("\nUnion of Set 1 and Set 2:")
+u = s1.union(s2)
+u.display()
+print("\nIntersection of Set 1 and Set 2:")
+i = s1.intersection(s2)
+i.display()
+print("\nDifference of Set 1 - Set 2:")
+d = s1.difference(s2)
+d.display()

@@ -1,0 +1,132 @@
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+class Student {
+public:
+int roll;
+char name[50];
+char division;
+char address[100];
+void accept() {
+cout << "Enter Roll No: ";
+cin >> roll;
+cin.ignore();
+cout << "Enter Name: ";
+cin.getline(name, 50);
+cout << "Enter Division: ";
+cin >> division;
+cin.ignore();
+cout << "Enter Address: ";
+cin.getline(address, 100);
+}
+void display() {
+cout << "Roll: " << roll << ", Name: " << name
+<< ", Division: " << division<< ", Address: " << address << endl;
+}
+int getRoll() {
+return roll;
+}
+};
+class FileHandler
+{
+public:
+void addstudent(Student s)
+{
+ofstream file("student.txt" , ios::app);
+file<<s.getRoll()<<" "<< s.name<<" "<<s.division<<" "<< s.address<<endl;
+file.close();
+cout<<"Student added successfully ";
+}
+void displayALL()
+{
+ifstream file("students.txt");
+Student s;
+bool found = false;
+while(file>> s.roll >> s.name >>s.division)
+{
+s.display();
+found = true ;
+}
+file.close();
+if(!found)
+cout<<"No record found ";
+}
+void searchStudent(int rollno)
+{
+ifstream file("student.txt");
+Student s ;
+bool found = false ;
+while (file >> s.roll >> s.name >> s.division) {
+if (s.roll == rollno) {
+cout << "Student Found:\n";
+s.display();
+found = true;
+break;
+}
+}
+file.close();
+if (!found)
+cout << "Student with roll no " << rollno << " does not exist.\n";
+}
+void deleteStudent(int rollno)
+{
+ifstream file("students.txt");
+ofstream temp("temp.txt");
+Student s;
+bool found = false;
+while (file >> s.roll >> s.name >> s.division) {
+if (s.roll == rollno) {
+found = true; // Skip writing this record
+} else {
+temp << s.roll<< " " << s.name << " " << s.division << " " << s.address << "\n";
+}
+}
+file.close();
+temp.close();
+remove("students.txt");
+rename("temp.txt", "students.txt");
+if (found)
+cout << "Student deleted successfully.\n";
+else
+cout << "Student with roll no " << rollno<< " does not exist.\n";
+}
+};
+int main()
+{
+FileHandler fh;
+Student s;
+int choice, rollno;
+do{
+cout << "\n--- MENU ---\n";
+cout << "1. Add Student\n2. Display All Students\n3. Search Student\n4. Delete Student\n5. Exit\n";
+cout << "Enter your choice: ";
+cin >> choice;
+switch(choice)
+{
+case 1:
+s.accept();
+fh.addstudent(s);
+break;
+case 2:
+fh.displayALL();
+break;
+case 3:
+cout << "Enter roll no to search: ";
+cin >> rollno;
+fh.searchStudent(rollno);
+break;
+case 4:
+cout << "Enter roll no to delete: ";
+cin >> rollno;
+fh.deleteStudent(rollno);
+break;
+case 5:
+cout << "Exiting...\n";
+break;
+default:
+cout << "Invalid choice.\n";
+}
+} while(choice != 5 );
+return 0 ;
+}
